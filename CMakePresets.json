@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "Debug",
+            "displayName": "Debug",
+            "description": "Configure for with GNU gcc/g++ (Debug)",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/${presetName}"
+            }
+        },
+        {
+            "name": "Release",
+            "displayName": "Release",
+            "inherits": "Debug",
+            "description": "Configure with GNU gcc/g++ (Release)",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ]
+}

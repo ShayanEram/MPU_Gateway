@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/Inc",
+        "${workspaceFolder}/Inc/Utils",
+        "${workspaceFolder}/Inc/Hw",
+        "${workspaceFolder}/Src",
+        "${workspaceFolder}/Src/Hw",
+        "${workspaceFolder}/build/Debug"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c17",
+      "cppStandard": "c++23",
+      "intelliSenseMode": "linux-gcc-x64",
+      "compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json"
+    }
+  ],
+  "version": 4
+}

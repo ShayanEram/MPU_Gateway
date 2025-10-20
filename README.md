@@ -5,6 +5,18 @@ This project implements an **Industrial IoT Gateway** in **modern C++23**, desig
 
 The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**. It demonstrates **production‑grade architecture** and advanced C++ concepts.
 
+## Build Intructions
+### CMD
+    cd MPU_Gateway
+    cmake --preset Debug (Release)
+    cd build
+    cmake ..
+    make
+### VS Code
+cmake --preset Debug (Release)
+Build
+Run
+
 ---
 
 ## 🎯 Features
