@@ -3,52 +3,53 @@
 ## 📌 Overview
 This project implements an **Industrial IoT Gateway** in **modern C++23**, designed to run on an embedded Linux system built with **Yocto**.  
 
-The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**. It demonstrates **production-grade architecture** and advanced C++ concepts, making it both **industry-relevant** and **resume-ready**.
+The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**. It demonstrates **production‑grade architecture** and advanced C++ concepts.
 
 ---
 
 ## 🎯 Features
-- **Multithreaded data acquisition** from multiple hardware interfaces.
-- **Asynchronous networking** (TCP/IP, MQTT) for cloud communication.
-- **Object-Oriented modular design** with clear separation of concerns.
-- **RAII-based resource management** for hardware and system resources.
-- **Templated data structures** (`MessageQueue<T>`, `RingBuffer<T>`).
-- **Producer-Consumer pipelines** for inter-thread communication.
-- **Observer pattern** for event-driven updates.
-- **File I/O** for telemetry logging and configuration parsing.
-- **OTA update checker** with async execution.
-- **Yocto integration** with a custom recipe and systemd service.
+- Multithreaded sensor acquisition and processing  
+- Asynchronous networking (TCP/IP, MQTT)  
+- Modular OOP architecture with hardware abstraction  
+- RAII‑based resource management and smart pointers  
+- Templates for thread‑safe queues and ring buffers  
+- File I/O for telemetry logging and configuration  
+- OTA update checker with async execution  
+- Yocto recipe + systemd integration  
 
 ---
 
-## 🧩 Project Structure
+## 🧩 Project Structure (with detailed responsibilities)
 
 ```
 gateway-project/
-├── CMakeLists.txt              # Top-level build config
-├── cmake/                      # Toolchain & cross-compilation configs
-├── include/                    # Public headers
-│   ├── gateway/
-│   │   ├── GatewayController.hpp
-│   │   ├── SensorManager.hpp
-│   │   ├── CommManager.hpp
-│   │   ├── DataProcessor.hpp
-│   │   ├── Logger.hpp
-│   │   ├── OTAUpdater.hpp
-│   │   └── utils/
-│   │       ├── MessageQueue.hpp
-│   │       ├── RingBuffer.hpp
-│   │       ├── RAIIHandle.hpp
-│   │       └── ThreadSafeQueue.hpp
-├── src/                        # Implementation files
-│   ├── main.cpp
-│   ├── GatewayController.cpp
-│   ├── SensorManager.cpp
-│   ├── CommManager.cpp
-│   ├── DataProcessor.cpp
-│   ├── Logger.cpp
-│   ├── OTAUpdater.cpp
-│   └── hw/                     # Hardware abstraction layer
+├── CMakeLists.txt              # Build configuration
+├── include/gateway/            # Public headers
+│   ├── GatewayController.hpp   # Orchestrates all managers
+│   ├── SensorManager.hpp       # Manages I2C/UART/PWM sensors
+│   ├── DataProcessor.hpp       # Processes raw sensor data
+│   ├── CommManager.hpp         # Handles MQTT/TCP/IP comms
+│   ├── Logger.hpp              # File logging & telemetry
+│   ├── OTAUpdater.hpp          # OTA update checks
+│   ├── hw/                     # Hardware abstraction layer
+│   │   ├── UARTPort.hpp        # RAII wrapper for UART
+│   │   ├── I2CDevice.hpp       # RAII wrapper for I2C
+│   │   ├── PWMController.hpp   # PWM control
+│   │   └── SocketClient.hpp    # TCP/IP client
+│   └── utils/                  # Utilities & templates
+│       ├── MessageQueue.hpp    # Thread-safe queue (templates)
+│       ├── RingBuffer.hpp      # Circular buffer (templates)
+│       ├── ThreadSafeQueue.hpp # Producer-consumer queue
+│       └── RAIIHandle.hpp      # Generic RAII resource wrapper
+├── src/                        # Implementations
+│   ├── main.cpp                # Entry point
+│   ├── GatewayController.cpp   # Lifecycle management
+│   ├── SensorManager.cpp       # Sensor polling threads
+│   ├── DataProcessor.cpp       # Filtering, AI inference
+│   ├── CommManager.cpp         # MQTT/TCP client logic
+│   ├── Logger.cpp              # File I/O logging
+│   ├── OTAUpdater.cpp          # Async OTA logic
+│   └── hw/                     # HAL implementations
 │       ├── UARTPort.cpp
 │       ├── I2CDevice.cpp
 │       ├── PWMController.cpp
@@ -57,44 +58,41 @@ gateway-project/
 │   ├── test_SensorManager.cpp
 │   ├── test_CommManager.cpp
 │   ├── test_DataProcessor.cpp
-│   └── mocks/
+│   └── mocks/                  # Mock hardware
 │       ├── MockUART.hpp
 │       ├── MockI2C.hpp
 │       └── MockSocket.hpp
 ├── configs/                    # Config files
-│   ├── gateway_config.json
-│   └── logging.conf
+│   └── gateway_config.json     # Defines sensors, comms, logging
 ├── scripts/                    # Helper scripts
 │   ├── run_gateway.sh
 │   └── ota_update.sh
 ├── docs/                       # Documentation
-│   ├── architecture.md
-│   ├── design_patterns.md
-│   └── usage.md
+│   ├── architecture.md         # Class diagram & thread flow
+│   ├── design_patterns.md      # Observer, RAII, Producer-Consumer
+│   └── usage.md                # How to run & extend
 └── yocto/                      # Yocto integration
-    ├── recipes-gateway/
-    │   ├── gateway/
-    │   │   ├── gateway_1.0.bb
-    │   │   └── files/
-    │   │       ├── gateway.service
-    │   │       └── default.conf
+    └── recipes-gateway/
+        └── gateway/
+            ├── gateway_1.0.bb  # Yocto recipe
+            └── files/
+                ├── gateway.service  # systemd unit
+                └── default.conf
 ```
 
 ---
 
-## 🧠 C++ Concepts Demonstrated
+## 🧠 Module Responsibilities
 
-- **OOP**: Modular classes (`SensorManager`, `CommManager`, etc.) with encapsulation, inheritance, and composition.  
-- **Multithreading**: `std::thread`, `std::mutex`, `std::condition_variable` for concurrent tasks.  
-- **Templates**: Generic `MessageQueue<T>`, `RingBuffer<T>`, `Observer<T>`.  
-- **RAII & Smart Pointers**: Resource wrappers for UART/I²C, `std::unique_ptr`, `std::shared_ptr`.  
-- **Async Programming**: `std::future`, `std::async` for OTA updates and logging.  
-- **Operator Overloading**: `<<` for `SensorData` logging.  
-- **Constexpr & Enums**: Compile-time constants and scoped enums for protocol IDs.  
-- **Design Patterns**: Observer, Producer-Consumer, Singleton, RAII.  
-- **File I/O**: Config parsing (JSON), telemetry logging (CSV/JSON).  
-- **Networking**: TCP/IP client, MQTT publish/subscribe.  
-- **Testing**: GoogleTest with mocks for hardware abstraction.  
+- **GatewayController** → Starts/stops all managers, coordinates lifecycle.  
+- **SensorManager** → Polls sensors (UART/I²C/PWM), pushes data into `ThreadSafeQueue<SensorData>`.  
+- **DataProcessor** → Consumes queue, applies filters/AI, forwards to CommManager + Logger.  
+- **CommManager** → Publishes data via MQTT/TCP, handles retries, optional local TCP server.  
+- **Logger** → Logs telemetry to CSV/JSON, rotates logs, supports log levels.  
+- **OTAUpdater** → Async check for updates, downloads, validates, triggers system update.  
+- **HAL (UARTPort, I2CDevice, PWMController, SocketClient)** → RAII wrappers for hardware access.  
+- **Utils (MessageQueue, RingBuffer, RAIIHandle)** → Templates and resource management helpers.  
+- **Tests** → GoogleTest unit tests with mocks for hardware.  
 
 ---
 
@@ -118,3 +116,32 @@ make -j$(nproc)
 ```bash
 bitbake core-image-minimal
 ```
+
+---
+
+## 📌 Development Roadmap (Follow During Production)
+
+1. **Setup project skeleton** → CMake, folders, headers.  
+2. **Implement HAL** → UART, I²C, PWM, Socket RAII wrappers.  
+3. **Build SensorManager** → Poll sensors, push to queue.  
+4. **Add DataProcessor** → Consume queue, filter/process data.  
+5. **Implement CommManager** → TCP/IP + MQTT client.  
+6. **Add Logger** → File I/O, operator overloading for `SensorData`.  
+7. **Add OTAUpdater** → Async update checker.  
+8. **Integrate GatewayController** → Orchestrate all modules.  
+9. **Write Unit Tests** → GoogleTest with mocks.  
+10. **Yocto Recipe** → Package app + systemd service.  
+11. **Docs** → Architecture diagram, design patterns, usage guide.  
+
+---
+
+## 🎓 C++ Concepts Demonstrated
+- **OOP**: Modular managers, inheritance for sensors.  
+- **Multithreading**: Sensor threads, comm threads, OTA async.  
+- **Templates**: Generic queues, buffers.  
+- **RAII**: Resource wrappers for hardware.  
+- **Smart Pointers**: Ownership management.  
+- **Async**: OTA updates, logging.  
+- **Operator Overloading**: Logging `SensorData`.  
+- **Constexpr & Enums**: Compile-time constants, scoped IDs.  
+- **Design Patterns**: Observer, Producer-Consumer, Singleton, RAII.  
