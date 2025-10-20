@@ -3,7 +3,7 @@
 ## 📌 Overview
 This project implements an **Industrial IoT Gateway** in **modern C++23**, designed to run on an embedded Linux system built with **Yocto**.  
 
-The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**. It demonstrates **production‑grade architecture** and advanced C++ concepts.
+The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**.
 
 ## Build Intructions
 ### CMD
@@ -13,9 +13,9 @@ The gateway collects data from sensors (via **UART, I²C, PWM**), processes it l
     cmake ..
     make
 ### VS Code
-cmake --preset Debug (Release)
-Build
-Run
+    cmake --preset Debug (Release)
+    Build
+    Run
 
 ---
 
@@ -36,7 +36,7 @@ Run
 ```
 gateway-project/
 ├── CMakeLists.txt              # Build configuration
-├── include/gateway/            # Public headers
+├── include/                    # Public headers
 │   ├── GatewayController.hpp   # Orchestrates all managers
 │   ├── SensorManager.hpp       # Manages I2C/UART/PWM sensors
 │   ├── DataProcessor.hpp       # Processes raw sensor data
