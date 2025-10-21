@@ -1,36 +1,25 @@
-#ifndef MESSAGE_QUEUE_HPP
-#define MESSAGE_QUEUE_HPP
+#ifndef INC_UTILS_MESSAGEQUEUE_HPP_
+#define INC_UTILS_MESSAGEQUEUE_HPP_
 
-#include <queue>
-#include <mutex>
-#include <condition_variable>
-#include <future>
+#include "ThreadSafeQueue.hpp"
 
-template <typename T>
+template<typename T>
 class MessageQueue {
 public:
-    void pushCommand(const T& command) {
-        std::lock_guard<std::mutex> lock(queueMutex);
-        commands.push(command);
-        condition.notify_one();
+    void send(const T& msg) { queue.push(msg); }
+    void send(T&& msg) { queue.push(std::move(msg)); }
+
+    T receive() 
+    {
+        T msg;
+        queue.pop(msg);
+        return msg;
     }
 
-    T popCommand() {
-        std::unique_lock<std::mutex> lock(queueMutex);
-        condition.wait(lock, [this]{ return !commands.empty(); });
-        T command = commands.front();
-        commands.pop();
-        return command;
-    }
-
-    std::future<T> popCommandAsync() {
-        return std::async(std::launch::async, &MessageQueue::popCommand, this);
-    }
+    bool try_receive(T& msg) { return queue.try_pop(msg); }
 
 private:
-    std::queue<T> commands;
-    std::mutex queueMutex;
-    std::condition_variable condition;
+    ThreadSafeQueue<T> queue;
 };
 
-#endif // MESSAGE_QUEUE_HPP
+#endif // INC_UTILS_MESSAGEQUEUE_HPP_
