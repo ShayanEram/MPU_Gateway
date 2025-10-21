@@ -7,34 +7,44 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Include directories
-include_directories(
-    ${CMAKE_SOURCE_DIR}/Inc
-    ${CMAKE_SOURCE_DIR}/Inc/Utils
-    ${CMAKE_SOURCE_DIR}/Inc/Hw
-)
-
 # Source files
-file(GLOB SRC_FILES
+file(GLOB_RECURSE SRC_FILES
     ${CMAKE_SOURCE_DIR}/Src/*.cpp
     ${CMAKE_SOURCE_DIR}/Src/Hw/*.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
-
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${CMAKE_SOURCE_DIR}/Inc
+    ${CMAKE_SOURCE_DIR}/Inc/Utils
+    ${CMAKE_SOURCE_DIR}/Inc/Hw
+)
 
 # Unit tests ##########################################
 option(BUILD_TESTS "Enable building unit tests" OFF)
 
 if(BUILD_TESTS)
     # Add GoogleTest
-    add_subdirectory(../googletest googletest-build)
-    file(GLOB TEST_SOURCES "Tests/*.cpp")
+    add_subdirectory(${CMAKE_SOURCE_DIR}/../googletest googletest-build)
+    
+    file(GLOB_RECURSE TEST_SOURCES
+        ${CMAKE_SOURCE_DIR}/Tests/*.cpp
+    )
 
-    add_executable(Gateway_tests ${TEST_SOURCES})
-    target_include_directories(Gateway_tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Inc)
-    target_link_libraries(Gateway_tests gtest gtest_main pthread)
+    add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES})
+    target_include_directories(${PROJECT_NAME}_tests PUBLIC
+        ${CMAKE_SOURCE_DIR}/Inc
+        ${CMAKE_SOURCE_DIR}/Inc/Utils
+        ${CMAKE_SOURCE_DIR}/Inc/Hw
+    )
+
+    target_link_libraries(${PROJECT_NAME}_tests
+        gtest
+        gtest_main
+        pthread
+    )
 
     enable_testing()
-    add_test(NAME Gateway_tests COMMAND Gateway_tests)
+    add_test(NAME ${PROJECT_NAME}_tests COMMAND ${PROJECT_NAME}_tests)
+
 endif()
