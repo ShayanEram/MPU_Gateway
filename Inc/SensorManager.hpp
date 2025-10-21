@@ -1,36 +1,22 @@
-/**
- * @file SensorManager.hpp
- * @brief Header file for SensorManager class.
- * Includes GPS, IMU (gyroscope, accelerometer), barometer, and magnetometer for precise movement tracking.
- * 
- */
-
-#ifndef SENSORMANAGER_HPP
-#define SENSORMANAGER_HPP
-
-#include <thread>
-#include <atomic>
-#include <iostream>
-#include <cstdint>
-#include <fstream>
-#include <string>
-
-#include "InterData.hpp"
+#ifndef INC_SENSORMANAGER_HPP
+#define INC_SENSORMANAGER_HPP
 
 class SensorManager {
 public:
-    explicit SensorManager();
-    ~SensorManager();
-    void start();
-    void stop();
+    SensorManager() = default;
+    ~SensorManager() = default;
 
-protected:
+    // Initialize sensors and resources
+    void init();
 
+    // Poll/update sensor state; should be called periodically
+    void update();
+
+    // Query initialization state
+    bool isInitialized() const noexcept { return initialized_; }
 
 private:
-    void runLoop();
-    std::thread moduleThread;
-    std::atomic<bool> running;
+    bool initialized_ = false;
 };
 
-#endif // SENSORMANAGER_HPP
+#endif // INC_SENSORMANAGER_HPP
