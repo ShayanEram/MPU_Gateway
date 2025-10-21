@@ -6,8 +6,9 @@ public:
     DataProcessor() = default;
     ~DataProcessor() = default;
 
-    // Add processing interface here
-    void process();
+    void start();
+    void stop();
+    void loop();
 };
 
 #endif // INC_DATAPROCESSOR_HPP

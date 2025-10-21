@@ -6,17 +6,11 @@ public:
     GatewayController() = default;
     ~GatewayController() = default;
 
-    // Initialize gateway resources
-    void init();
-
-    // Poll/update gateway state; should be called periodically
-    void update();
-
-    // Query initialization state
-    bool isInitialized() const noexcept { return initialized_; }
+    void start();
+    void stop();
 
 private:
-    bool initialized_ = false;
+
 };
 
 #endif // INC_GATEWAYCONTROLLER_HPP

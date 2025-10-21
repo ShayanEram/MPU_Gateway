@@ -1,23 +1,21 @@
 #ifndef INC_CLOUDMANAGER_HPP_
 #define INC_CLOUDMANAGER_HPP_
 
+#include <string>
+
 class CloudManager 
 {
 public:
     CloudManager() = default;
     ~CloudManager() = default;
 
-    // Initialize cloud resources
-    void init();
-
-    // Poll/update cloud state; should be called periodically
-    void update();
-
-    // Query initialization state
-    bool isInitialized() const noexcept { return initialized_; }
+    bool connect();
+    void disconnect();
+    void publish(const std::string& payload);
+    std::string receiveOnce();
 
 private:
-    bool initialized_ = false;
+
 };
 
 #endif // INC_CLOUDMANAGER_HPP_

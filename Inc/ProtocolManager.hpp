@@ -1,15 +1,16 @@
 #ifndef INC_PROTOCOLMANAGER_HPP
 #define INC_PROTOCOLMANAGER_HPP
 
+#include <sstream>
+
 class ProtocolManager {
 public:
     ProtocolManager() = default;
     ~ProtocolManager() = default;
 
-    ProtocolManager(const ProtocolManager&) = delete;
-    ProtocolManager& operator=(const ProtocolManager&) = delete;
+    std::string toCloudPayload() const;
+    void fromCloudPayload(const std::string& payload) const;
 
-    // TODO: add protocol management APIs
 };
 
 #endif // INC_PROTOCOLMANAGER_HPP

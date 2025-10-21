@@ -6,17 +6,16 @@ public:
     OtaManager() = default;
     ~OtaManager() = default;
 
-    // Initialize OTA manager resources
-    void init();
-
-    // Start the OTA update process
-    void startUpdate();
-
-    // Query initialization state
-    bool isInitialized() const noexcept { return initialized_; }
+    void start();
+    void stop();
+    void loop();
+    bool checkForUpdates();
+    bool downloadUpdate();
+    bool validateDownload();
+    void applyUpdate();
 
 private:
-    bool initialized_ = false;
+
 };
 
 #endif // INC_OTAMANAGER_HPP

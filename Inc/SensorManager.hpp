@@ -1,22 +1,26 @@
 #ifndef INC_SENSORMANAGER_HPP
 #define INC_SENSORMANAGER_HPP
 
+#include "ThreadSafeQueue.hpp"
+
 class SensorManager {
 public:
     SensorManager() = default;
     ~SensorManager() = default;
 
-    // Initialize sensors and resources
-    void init();
+    void start();
+    void stop();
 
-    // Poll/update sensor state; should be called periodically
-    void update();
+    double readUARTSensor();
+    double readI2CSensor();
+    double readPWMSensor();
 
-    // Query initialization state
-    bool isInitialized() const noexcept { return initialized_; }
+    void pollUART();
+    void pollI2C();
+    void pollPWM();
 
 private:
-    bool initialized_ = false;
+
 };
 
 #endif // INC_SENSORMANAGER_HPP
