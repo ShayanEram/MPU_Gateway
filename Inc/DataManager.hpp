@@ -2,6 +2,16 @@
 #define INC_DATAMANAGER_HPP
 
 #include <vector>
+#include <deque>
+
+#include "SensorManager.hpp"
+
+struct ProcessedData 
+{
+    std::chrono::system_clock::time_point timestamp;
+    double value;
+    SensorType source;
+};
 
 class DataManager 
 {
@@ -9,11 +19,13 @@ public:
     DataManager() = default;
     ~DataManager() = default;
 
-    void DataManager::ingest(void);
-    void DataManager::filter() const;
-    std::vector<int> DataManager::batch(std::size_t n) const;
+    void ingest(const SensorData& d);
+    ProcessedData filter() const;
+    std::vector<ProcessedData> batch(std::size_t n) const;
 
 private:
+    std::deque<SensorData> buffer;
+    std::size_t maxWindow;
 
 };
 

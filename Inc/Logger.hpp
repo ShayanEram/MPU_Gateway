@@ -1,25 +1,24 @@
 #ifndef INC_LOGGER_HPP
 #define INC_LOGGER_HPP
 
-#include <cstdarg>
 #include <string>
+#include <ostream>
 
-enum class LogLevel { Debug, Info, Warn, Error, Fatal };
+#include "DataManager.hpp"
+#include "SensorManager.hpp"
 
 class Logger {
 public:
-    static void Init(LogLevel level = LogLevel::Info);
-    static void SetLevel(LogLevel level);
-    static LogLevel GetLevel();
+    explicit Logger(const std::string& path);
 
-    static void Log(LogLevel level, const char* fmt, ...);
-    static void Debug(const char* fmt, ...);
-    static void Info(const char* fmt, ...);
-    static void Warn(const char* fmt, ...);
-    static void Error(const char* fmt, ...);
+    void logProcessed(const ProcessedData& d);
+
+    friend std::ostream& operator<<(std::ostream& os, const SensorData& s);
 
 private:
-    Logger() = delete;
+    std::string _logPath;
 };
+
+std::ostream& operator<<(std::ostream& os, const SensorData& s);
 
 #endif // INC_LOGGER_HPP
