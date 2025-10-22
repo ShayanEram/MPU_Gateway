@@ -25,7 +25,7 @@ option(BUILD_TESTS "Enable building unit tests" OFF)
 
 if(BUILD_TESTS)
     # Add GoogleTest
-    add_subdirectory(${CMAKE_SOURCE_DIR}/../googletest googletest-build)
+    add_subdirectory(${CMAKE_SOURCE_DIR}/External/googletest)
     
     file(GLOB_RECURSE TEST_SOURCES
         ${CMAKE_SOURCE_DIR}/Tests/*.cpp

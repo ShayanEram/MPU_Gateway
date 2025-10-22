@@ -8,7 +8,9 @@
         "${workspaceFolder}/Inc/Hw",
         "${workspaceFolder}/Src",
         "${workspaceFolder}/Src/Hw",
-        "${workspaceFolder}/build/Debug"
+        "${workspaceFolder}/build/Debug",
+        "${workspaceFolder}/External/googletest/googletest/include",
+        "${workspaceFolder}/External/googletest/googlemock/include"
       ],
       "defines": [],
       "compilerPath": "/usr/bin/g++",
