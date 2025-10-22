@@ -1,25 +1,16 @@
 # Industrial IoT Gateway (C++23 + Yocto)
 
-## 📌 Overview
+## Overview
 This project implements an **Industrial IoT Gateway** in **modern C++23**, designed to run on an embedded Linux system built with **Yocto**.  
 
 The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**.
 
 ## Build Intructions
-### CMD
-    cd MPU_Gateway
-    cmake --preset Debug (Release)
-    cd build
-    cmake ..
-    make
-### VS Code
-    cmake --preset Debug (Release)
-    Build
-    Run
+
 
 ---
 
-## 🎯 Features
+## Features
 - Multithreaded sensor acquisition and processing  
 - Asynchronous networking (TCP/IP, MQTT)  
 - Modular OOP architecture with hardware abstraction  
@@ -94,7 +85,7 @@ gateway-project/
 
 ---
 
-## 🧠 Module Responsibilities
+## Module Responsibilities
 
 - **GatewayController** → Starts/stops all managers, coordinates lifecycle.  
 - **SensorManager** → Polls sensors (UART/I²C/PWM), pushes data into `ThreadSafeQueue<SensorData>`.  
@@ -108,14 +99,19 @@ gateway-project/
 
 ---
 
-## 🚀 Build & Run
+## Build & Run
 
 ### Build
-```bash
-mkdir build && cd build
-cmake ..
-make -j$(nproc)
-```
+#### CMD
+    cd MPU_Gateway
+    cmake --preset Debug (Release)
+    cd build
+    cmake ..
+    make
+#### VS Code
+    cmake --preset Debug (Release)
+    Build
+    Run
 
 ### Run
 ```bash
