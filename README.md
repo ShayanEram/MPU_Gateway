@@ -5,8 +5,8 @@ This project implements an **Industrial IoT Gateway** in **modern C++23**, desig
 
 The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**.
 
-## Build Intructions
-
+## Custom Linux Yocto distro
+    https://github.com/ShayanEram/MPU_Gateway-Yocto
 
 ---
 
