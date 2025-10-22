@@ -16,7 +16,7 @@ struct ProcessedData
 class DataManager 
 {
 public:
-    DataManager() = default;
+    explicit DataManager(std::size_t window = 10) : maxWindow(window) {}
     ~DataManager() = default;
 
     void ingest(const SensorData& d);

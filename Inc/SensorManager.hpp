@@ -24,8 +24,8 @@ struct SensorData
 
 class SensorManager {
 public:
-    SensorManager() = default;
-    ~SensorManager() = default;
+    SensorManager(ThreadSafeQueue<SensorData>& q);
+    ~SensorManager();
 
     void start();
     void stop();
@@ -41,7 +41,7 @@ private:
 
     std::vector<std::thread> _threads;
     std::atomic<bool> _running;
-    ThreadSafeQueue<SensorData> _queue;
+    ThreadSafeQueue<SensorData>& _queue;
 };
 
 #endif // INC_SENSORMANAGER_HPP

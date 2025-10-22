@@ -25,7 +25,7 @@ ProcessedData DataManager::filter() const {
     ProcessedData pd{
         buffer.back().timestamp,
         avg,
-        buffer.back().source
+        buffer.back().type
     };
 
     return pd;
@@ -36,7 +36,7 @@ std::vector<ProcessedData> DataManager::batch(std::size_t n) const {
     out.reserve(n);
     std::size_t count = 0;
     for (auto it = buffer.rbegin(); it != buffer.rend() && count < n; ++it, ++count) {
-        out.push_back(ProcessedData{it->timestamp, it->value, it->source});
+        out.push_back(ProcessedData{it->timestamp, it->value, it->type});
     }
     std::reverse(out.begin(), out.end());
     return out;

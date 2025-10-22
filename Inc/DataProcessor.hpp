@@ -13,7 +13,11 @@
 
 class DataProcessor {
 public:
-    DataProcessor();
+    DataProcessor(ThreadSafeQueue<SensorData>& in,
+                  DataManager& dm,
+                  ProtocolManager& pm,
+                  CloudManager& cm,
+                  Logger& lg);
     ~DataProcessor();
 
     void start();
@@ -25,12 +29,11 @@ private:
     std::thread _worker;
     std::atomic<bool> _running;
 
-    ThreadSafeQueue<SensorData> _inQueue;
-    DataManager _dataManager;
-    ProtocolManager _protocol;
-    CloudManager _cloud;
-    Logger _logger;
-    
+    ThreadSafeQueue<SensorData>&    _inQueue;
+    DataManager&                    _dataManager;
+    ProtocolManager&                _protocol;
+    CloudManager&                   _cloud;
+    Logger&                         _logger;
 };
 
 #endif // INC_DATAPROCESSOR_HPP

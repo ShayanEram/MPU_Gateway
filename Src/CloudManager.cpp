@@ -7,9 +7,8 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-CloudManager::CloudManager(const std::string& ip, int port): _serverIp(ip), _serverPort(port), _sockfd(-1) {
-    // Constructor implementation
-}
+CloudManager::CloudManager(const std::string& ip, int port):
+     _serverIp(ip), _serverPort(port), _sockfd(-1) {}
 
 CloudManager::~CloudManager() { 
     disconnect(); 

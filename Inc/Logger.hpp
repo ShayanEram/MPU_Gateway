@@ -10,15 +10,15 @@
 class Logger {
 public:
     explicit Logger(const std::string& path);
+    ~Logger() = default;
 
     void logProcessed(const ProcessedData& d);
-
-    friend std::ostream& operator<<(std::ostream& os, const SensorData& s);
 
 private:
     std::string _logPath;
 };
 
+// SensorData
 std::ostream& operator<<(std::ostream& os, const SensorData& s);
 
 #endif // INC_LOGGER_HPP

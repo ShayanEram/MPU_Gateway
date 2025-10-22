@@ -1,6 +1,6 @@
 #include "SensorManager.hpp"
 
-SensorManager::SensorManager(): _running(false) {
+SensorManager::SensorManager(ThreadSafeQueue<SensorData>& q): _queue(q), _running(false) {
     // Constructor implementation
 }
 

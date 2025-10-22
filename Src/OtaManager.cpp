@@ -2,9 +2,8 @@
 
 #include <fstream>
 
-OtaManager::OtaManager(const std::string& metaUrl, const std::string& dlPath): _metadataUrl(metaUrl), _downloadPath(dlPath), _running(false) {
-    // Constructor implementation
-}
+OtaManager::OtaManager(const std::string& metaUrl, const std::string& dlPath): 
+    _metadataUrl(metaUrl), _downloadPath(dlPath), _running(false) {}
 
 OtaManager::~OtaManager() { 
     stop(); 
@@ -54,3 +53,4 @@ void OtaManager::applyUpdate() {
     // In real system: hand off to RAUC/Mender/system updater
     // Here: just mark applied
     _lastApplied = std::chrono::system_clock::now();
+}

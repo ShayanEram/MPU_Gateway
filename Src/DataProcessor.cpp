@@ -3,9 +3,8 @@
 #include <numeric>
 #include <algorithm>
 
-DataProcessor::DataProcessor(): _running(false) {
-    // Constructor implementation
-}
+DataProcessor::DataProcessor(ThreadSafeQueue<SensorData>& in, DataManager& dm, ProtocolManager& pm, CloudManager& cm, Logger& lg)
+    : _inQueue(in), _dataManager(dm), _protocol(pm), _cloud(cm), _logger(lg), _running(false) {}
 
 DataProcessor::~DataProcessor() { 
     stop(); 
