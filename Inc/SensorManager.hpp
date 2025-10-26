@@ -22,7 +22,7 @@ enum class SensorType
     OPCUA,
     CAN
     #ifdef OPTIONAL_SENSORS
-        ,PWM
+    ,PWM
     #endif
 };
 
@@ -85,13 +85,13 @@ private:
     double readCANSensor();
 
     #ifdef OPTIONAL_SENSORS
-        /**
-         * PWM
-         * 
-         * Connected to (optional): Local fan or valve actuator.
-         * Filtering rules: N/A, PWM is output!
-         */
-        void writePWMSensor();
+    /**
+     * PWM
+     * 
+     * Connected to (optional): Local fan or valve actuator.
+     * Filtering rules: N/A, PWM is output!
+     */
+    void writePWMSensor();
     #endif
     
     void pollUART();
