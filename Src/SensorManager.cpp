@@ -25,40 +25,52 @@ void SensorManager::stop() {
 }
 //------------------------------------------------------------------------------------
 double SensorManager::readUARTSensor() {
-    // TODO: read from UARTPort HAL; returning stub
+    // TODO: returning stub
     return 42.0;
 }
 
 double SensorManager::readI2CSensor() {
-    // TODO: read from I2CDevice HAL; returning stub
+    // TODO: returning stub
     return 24.0;
 }
 
 double SensorManager::readPWMSensor() {
-    // TODO: read from PWM controller or measure duty; returning stub
+    // TODO: returning stub
     return 0.5;
 }
 //------------------------------------------------------------------------------------
 void SensorManager::pollUART() {
     while (_running) {
-        SensorData d{std::chrono::system_clock::now(), readUARTSensor(), SensorType::UART};
+        SensorData d {
+            std::chrono::system_clock::now(),
+            readUARTSensor(),
+            SensorType::UART
+        };
         _queue.push(d);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::milliseconds(UART_INTERVAL_CHECK));
     }
 }
 
 void SensorManager::pollI2C() {
     while (_running) {
-        SensorData d{std::chrono::system_clock::now(), readI2CSensor(), SensorType::I2C};
+        SensorData d {
+            std::chrono::system_clock::now(),
+            readI2CSensor(),
+            SensorType::I2C
+        };
         _queue.push(d);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(I2C_INTERVAL_CHECK));
     }
 }
 
 void SensorManager::pollPWM() {
     while (_running) {
-        SensorData d{std::chrono::system_clock::now(), readPWMSensor(), SensorType::PWM};
+        SensorData d {
+            std::chrono::system_clock::now(), 
+            readPWMSensor(), 
+            SensorType::PWM
+        };
         _queue.push(d);
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+        std::this_thread::sleep_for(std::chrono::milliseconds(PWM_INTERVAL_CHECK));
     }
 }

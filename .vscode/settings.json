@@ -67,6 +67,7 @@
     "typeinfo": "cpp",
     "variant": "cpp",
     "map": "cpp",
-    "codecvt": "cpp"
+    "codecvt": "cpp",
+    "queue": "cpp"
   }
 }
