@@ -1,3 +1,6 @@
 [submodule "External/googletest"]
 	path = External/googletest
 	url = https://github.com/google/googletest.git
+[submodule "External/JsonCpp"]
+	path = External/JsonCpp
+	url = https://github.com/ShayanEram/LIB_Json-Cpp.git
