@@ -45,7 +45,7 @@ public:
     std::vector<ProcessedData> batch(std::size_t n) const;
 
 private:
-    std::deque<SensorData> _buffer; // Add value to the front and disgard old ones
+    std::deque<SensorData> _buffer; // Add value to the front and disgard old ones // TODO: unordered-map for each sensorType
     std::size_t _maxWindow;
     std::unordered_map<SensorType, FilterRule> _rules;
     std::unordered_map<SensorType, SensorState> _states;

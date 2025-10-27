@@ -68,6 +68,10 @@
     "variant": "cpp",
     "map": "cpp",
     "codecvt": "cpp",
-    "queue": "cpp"
+    "queue": "cpp",
+    "any": "cpp",
+    "forward_list": "cpp",
+    "ranges": "cpp",
+    "valarray": "cpp"
   }
 }

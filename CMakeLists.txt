@@ -13,11 +13,28 @@ file(GLOB_RECURSE SRC_FILES
     ${CMAKE_SOURCE_DIR}/Src/Hw/*.cpp
 )
 
+# EXTERNAL DEPENDENCIES ################################
+add_library(
+    json_external INTERFACE
+)
+
+target_include_directories(
+    json_external 
+    INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/External/JsonCpp>
+)
+
+# Main Target ##########################################
 add_executable(${PROJECT_NAME} ${SRC_FILES})
+
 target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/Inc
     ${CMAKE_SOURCE_DIR}/Inc/Utils
     ${CMAKE_SOURCE_DIR}/Inc/Hw
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    json_external
 )
 
 # Unit tests ##########################################
@@ -42,6 +59,7 @@ if(BUILD_TESTS)
         gtest
         gtest_main
         pthread
+        json_external
     )
 
     enable_testing()
