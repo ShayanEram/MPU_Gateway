@@ -14,13 +14,8 @@ file(GLOB_RECURSE SRC_FILES
 )
 
 # EXTERNAL DEPENDENCIES ################################
-add_library(
-    json_external INTERFACE
-)
-
-target_include_directories(
-    json_external 
-    INTERFACE
+add_library(json_external INTERFACE)
+target_include_directories(json_external INTERFACE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/External/JsonCpp>
 )
 
@@ -35,6 +30,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     json_external
+    #PahoMqttCpp::paho-mqttpp3
 )
 
 # Unit tests ##########################################
@@ -60,6 +56,7 @@ if(BUILD_TESTS)
         gtest_main
         pthread
         json_external
+        #PahoMqttCpp::paho-mqttpp3
     )
 
     enable_testing()

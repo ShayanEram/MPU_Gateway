@@ -4,3 +4,9 @@
 [submodule "External/JsonCpp"]
 	path = External/JsonCpp
 	url = https://github.com/ShayanEram/LIB_Json-Cpp.git
+[submodule "External/paho.mqtt.c"]
+	path = External/paho.mqtt.c
+	url = https://github.com/eclipse/paho.mqtt.c.git
+[submodule "External/paho.mqtt.cpp"]
+	path = External/paho.mqtt.cpp
+	url = https://github.com/eclipse/paho.mqtt.cpp.git
