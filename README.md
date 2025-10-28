@@ -102,6 +102,31 @@ gateway-project/
 ## Build & Run
 
 ### Build
+#### Build MQTT Libs manually (Host pc)
+    cd /MPU_Gateway
+    mkdir -p build/External/paho.mqtt.c
+    mkdir -p build/External/paho.mqtt.cpp
+
+    cmake -S External/paho.mqtt.c -B build/External/paho.mqtt.c \
+        -DPAHO_WITH_SSL=ON \
+        -DPAHO_BUILD_STATIC=ON \
+        -DPAHO_BUILD_SHARED=OFF \
+        -DPAHO_ENABLE_CMAKE_CONFIG=ON
+
+    cmake --build build/External/paho.mqtt.c --parallel
+
+    cmake --install build/External/paho.mqtt.c --prefix External/paho.mqtt.c/install
+
+    cmake -S External/paho.mqtt.cpp -B build/External/paho.mqtt.cpp \
+        -DPAHO_BUILD_STATIC=ON \
+        -DPAHO_BUILD_SHARED=OFF \
+        -DPAHO_WITH_MQTT_C=OFF \
+        -DCMAKE_PREFIX_PATH=$PWD/External/paho.mqtt.c/install
+
+    cmake --build build/External/paho.mqtt.cpp --parallel
+
+    cmake --install build/External/paho.mqtt.cpp --prefix External/paho.mqtt.cpp/install
+
 #### CMD
     cd MPU_Gateway
     cmake --preset Debug (Release)

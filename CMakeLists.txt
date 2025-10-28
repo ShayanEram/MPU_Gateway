@@ -19,6 +19,12 @@ target_include_directories(json_external INTERFACE
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/External/JsonCpp>
 )
 
+list(APPEND CMAKE_PREFIX_PATH
+    ${CMAKE_SOURCE_DIR}/External/paho.mqtt.c/install
+    ${CMAKE_SOURCE_DIR}/External/paho.mqtt.cpp/install
+)
+find_package(PahoMqttCpp REQUIRED)
+
 # Main Target ##########################################
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
@@ -30,7 +36,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     json_external
-    #PahoMqttCpp::paho-mqttpp3
+    PahoMqttCpp::paho-mqttpp3
+    pthread ssl crypto
 )
 
 # Unit tests ##########################################
@@ -56,7 +63,7 @@ if(BUILD_TESTS)
         gtest_main
         pthread
         json_external
-        #PahoMqttCpp::paho-mqttpp3
+        PahoMqttCpp::paho-mqttpp3
     )
 
     enable_testing()
