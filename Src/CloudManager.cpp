@@ -7,60 +7,119 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-CloudManager::CloudManager(const std::string& ip, int port):
-     _serverIp(ip), _serverPort(port), _sockfd(-1) {}
+CloudManager::CloudManager(const std::string& brokerUri,
+                           const std::string& clientId,
+                           const std::string& username,
+                           const std::string& password)
+    : _brokerUri(brokerUri),
+      _clientId(clientId),
+      _username(username),
+      _password(password),
+      _client(_brokerUri, _clientId),
+      _callback(*this)
+{
+    _connOpts.set_clean_session(true);
+    if (!_username.empty()) {
+        _connOpts.set_user_name(_username);
+        _connOpts.set_password(_password);
+    }
+    _client.set_callback(_callback);
+}
 
 CloudManager::~CloudManager() { 
     disconnect(); 
 }
 //------------------------------------------------------------------------------------
-bool CloudManager::connect() {
-    disconnect();
-    _sockfd = ::socket(AF_INET, SOCK_STREAM, 0);
-    if (_sockfd < 0) {
-        return false;
+void CloudManager::connect() {
+    try {
+        std::cout << "[CloudManager] Connecting to " << _brokerUri << "..." << std::endl;
+        _client.connect(_connOpts)->wait();
+        std::cout << "[CloudManager] Connected." << std::endl;
     }
-
-    sockaddr_in addr{};
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(_serverPort);
-    if (::inet_pton(AF_INET, _serverIp.c_str(), &addr.sin_addr) <= 0) {
-        return false;
+    catch (const mqtt::exception& e) {
+        std::cerr << "[CloudManager] Connection failed: " << e.what() << std::endl;
     }
-
-    if (::connect(_sockfd, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
-        ::close(_sockfd);
-        _sockfd = -1;
-        return false;
-    }
-    return true;
 }
 
 void CloudManager::disconnect() {
-    if (_sockfd >= 0) { 
-        ::close(_sockfd); _sockfd = -1; 
+    try {
+        if (_client.is_connected()) {
+            _client.disconnect()->wait();
+            std::cout << "[CloudManager] Disconnected." << std::endl;
+        }
+    }
+    catch (const mqtt::exception& e) {
+        std::cerr << "[CloudManager] Disconnect failed: " << e.what() << std::endl;
     }
 }
 
-void CloudManager::publish(const std::string& payload) {
-    std::async(std::launch::async, [this, payload]() {
-        if (_sockfd < 0 && !connect()) return;
-        const char* buf = payload.c_str();
-        std::size_t remaining = payload.size();
-        while (remaining > 0) {
-            ssize_t sent = ::send(_sockfd, buf, remaining, 0);
-            if (sent <= 0) { connect(); return; }
-            buf += sent;
-            remaining -= static_cast<std::size_t>(sent);
-        }
-    });
+bool CloudManager::isConnected() const {
+    return _client.is_connected();
 }
 
-std::string CloudManager::receiveOnce() {
-    if (_sockfd < 0 && !connect()) return {};
-    char buf[512];
-    ssize_t n = ::recv(_sockfd, buf, sizeof(buf)-1, 0);
-    if (n <= 0) return {};
-    buf[n] = '\0';
-    return std::string(buf);
+void CloudManager::publish(const std::string& topic,
+                           const std::string& payload,
+                           int qos,
+                           bool retained) {
+    if (!_client.is_connected()) {
+        std::cerr << "[CloudManager] Publish failed: not connected." << std::endl;
+        return;
+    }
+    try {
+        auto msg = mqtt::make_message(topic, payload);
+        msg->set_qos(qos);
+        msg->set_retained(retained);
+        _client.publish(msg);
+    }
+    catch (const mqtt::exception& e) {
+        std::cerr << "[CloudManager] Publish error: " << e.what() << std::endl;
+    }
+}
+
+void CloudManager::subscribe(const std::string& topic, int qos) {
+    if (!_client.is_connected()) {
+        std::cerr << "[CloudManager] Subscribe failed: not connected." << std::endl;
+        return;
+    }
+    try {
+        _client.subscribe(topic, qos)->wait();
+        std::cout << "[CloudManager] Subscribed to " << topic << std::endl;
+    }
+    catch (const mqtt::exception& e) {
+        std::cerr << "[CloudManager] Subscribe error: " << e.what() << std::endl;
+    }
+}
+
+void CloudManager::setCommandHandler(CommandHandler handler) {
+    _commandHandler = std::move(handler);
+}
+
+void CloudManager::onMessageArrived(mqtt::const_message_ptr msg) {
+    if (_commandHandler) {
+        _commandHandler(msg->get_topic(), msg->to_string());
+    } else {
+        std::cout << "[CloudManager] Message on " << msg->get_topic()
+                  << ": " << msg->to_string() << std::endl;
+    }
+}
+
+void CloudManager::onConnectionLost(const std::string& cause) {
+    std::cerr << "[CloudManager] Connection lost: " << cause << std::endl;
+    // Optionally: try reconnect
+    try {
+        _client.reconnect();
+        std::cout << "[CloudManager] Reconnected." << std::endl;
+    }
+    catch (const mqtt::exception& e) {
+        std::cerr << "[CloudManager] Reconnect failed: " << e.what() << std::endl;
+    }
+}
+
+// --- Callback adapter ---
+void CloudManager::Callback::connection_lost(const std::string& cause) {
+    _manager.onConnectionLost(cause);
+}
+
+void CloudManager::Callback::message_arrived(mqtt::const_message_ptr msg) {
+    _manager.onMessageArrived(msg);
 }

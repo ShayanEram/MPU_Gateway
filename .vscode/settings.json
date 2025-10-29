@@ -72,6 +72,8 @@
     "any": "cpp",
     "forward_list": "cpp",
     "ranges": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "csignal": "cpp",
+    "list": "cpp"
   }
 }

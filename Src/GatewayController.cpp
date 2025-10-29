@@ -8,7 +8,7 @@ GatewayController::GatewayController(const std::string& cfg)
     : _sensorQueue(),
       _protocolManager(),
       _dataManager(),
-      _cloudManager("127.0.0.1", 9000),
+      _cloudManager("tcp://broker.hivemq.com:1883", "gateway-001"),
       _logger("/var/log/gateway.log"),
       _deviceManager(cfg),
       _dataProcessor(_sensorQueue, _dataManager, _protocolManager, _cloudManager, _logger),
