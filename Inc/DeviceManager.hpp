@@ -18,7 +18,7 @@ struct DeviceHealth {
 
 class DeviceManager {
 public:
-    explicit DeviceManager(const std::string& cfgPath) : _configPath(cfgPath) {}
+    explicit DeviceManager(const std::string& cfgPath);
     ~DeviceManager() = default;
 
     bool loadConfig(const std::string& path);

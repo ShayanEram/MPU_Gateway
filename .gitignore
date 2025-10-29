@@ -1,3 +1,4 @@
 /build
-/External/paho.mqtt.cpp/install
-/External/paho.mqtt.c/install
+
+/External/paho.mqtt.cpp/install/
+/External/paho.mqtt.c/install/
