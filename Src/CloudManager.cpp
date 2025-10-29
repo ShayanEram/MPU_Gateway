@@ -1,11 +1,6 @@
 #include "CloudManager.hpp"
 
-#include <future>
-#include <cstring>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
+#include <iostream>
 
 CloudManager::CloudManager(const std::string& brokerUri,
                            const std::string& clientId,

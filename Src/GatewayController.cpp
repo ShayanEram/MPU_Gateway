@@ -33,6 +33,14 @@ void GatewayController::start() {
     _dataProcessor.start();
     _otaManager.start();
 
+    _cloudManager.setCommandHandler([](const std::string& topic, const std::string& payload) {
+        std::cout << "[App] Command received on " << topic
+                  << " with payload: " << payload << std::endl;
+        // TODO: Dispatch to device logic here
+    });
+    _cloudManager.connect();
+    _cloudManager.subscribe("gateway/001/commands/#");
+
     while (_running) {
         auto health = _deviceManager.snapshotHealth();
         // Optionally publish health or log

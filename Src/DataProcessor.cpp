@@ -27,7 +27,7 @@ void DataProcessor::loop() {
             _dataManager.ingest(d);                  // aggregate
             ProcessedData pd = _dataManager.filter(); // filtered window result
             std::string payload = _protocol.toCloudPayload(pd); // translate
-            _cloud.publish(payload);                 // send upstream
+            _cloud.publish("gateway/001/telemetry/temp", payload);                 // send upstream
             _logger.logProcessed(pd);                // persist locally
         }
     }
