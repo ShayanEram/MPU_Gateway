@@ -22,8 +22,16 @@ target_include_directories(json_external INTERFACE
 list(APPEND CMAKE_PREFIX_PATH
     ${CMAKE_SOURCE_DIR}/External/paho.mqtt.c/install
     ${CMAKE_SOURCE_DIR}/External/paho.mqtt.cpp/install
+    ${CMAKE_SOURCE_DIR}/External/libmodbus/install
 )
 find_package(PahoMqttCpp REQUIRED)
+
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(LIBMODBUS REQUIRED libmodbus)
+
+# Add open62541 OPC UA library
+add_subdirectory(${CMAKE_SOURCE_DIR}/External/open62541)
+
 
 # Main Target ##########################################
 add_executable(${PROJECT_NAME} ${SRC_FILES})
@@ -32,12 +40,20 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/Inc
     ${CMAKE_SOURCE_DIR}/Inc/Utils
     ${CMAKE_SOURCE_DIR}/Inc/Hw
+    ${CMAKE_SOURCE_DIR}/External/open62541
+    ${CMAKE_SOURCE_DIR}/External/libmodbus/install/include
+)
+
+target_link_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/External/libmodbus/install/lib
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     json_external
     PahoMqttCpp::paho-mqttpp3
     pthread ssl crypto
+    open62541
+    modbus
 )
 
 # Unit tests ##########################################
@@ -64,6 +80,7 @@ if(BUILD_TESTS)
         pthread
         json_external
         PahoMqttCpp::paho-mqttpp3
+        open62541
     )
 
     enable_testing()

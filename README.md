@@ -3,7 +3,7 @@
 ## Overview
 This project implements an **Industrial IoT Gateway** in **modern C++23**, designed to run on an embedded Linux system built with **Yocto**.  
 
-The gateway collects data from sensors (via **UART, I²C, PWM**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**.
+The gateway collects data from sensors (via **UART, I²C, SPi, CAN, Modbus, OPCUA**), processes it locally, and publishes telemetry to the cloud using **TCP/IP and MQTT**.
 
 ## Custom Linux Yocto distro
     https://github.com/ShayanEram/MPU_Gateway-Yocto
@@ -22,7 +22,7 @@ The gateway collects data from sensors (via **UART, I²C, PWM**), processes it l
 
 ---
 
-## 🧩 Project Structure (with detailed responsibilities)
+## Project Structure (with detailed responsibilities)
 
 ```
 gateway-project/
@@ -126,6 +126,13 @@ gateway-project/
     cmake --build build/External/paho.mqtt.cpp --parallel
 
     cmake --install build/External/paho.mqtt.cpp --prefix External/paho.mqtt.cpp/install
+
+#### Build Lib Modbus manually (Host pc)
+    cd External/libmodbus
+    ./autogen.sh
+    ./configure --prefix=$PWD/install
+    make -j4
+    make install
 
 #### CMD
     cd MPU_Gateway

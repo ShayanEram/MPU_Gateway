@@ -12,6 +12,7 @@
 #include <chrono>
 
 #include "ThreadSafeQueue.hpp"
+#include "HAL.hpp"
 
 enum class SensorType 
 {
@@ -111,6 +112,14 @@ private:
     std::atomic<bool> _running;
     std::vector<std::thread> _threads;
     ThreadSafeQueue<SensorData>& _queue;
+
+    ModbusRTUClient modbusClient_;
+    I2CDevice i2cSensor_;
+    SPIDevice spi_;
+    OPCUAClient opcuaClient_;
+    ModbusTCPClient modbusTcpClient_;
+    CANDevice can_;
+    PWMChannel pwm_;
 };
 
 #endif // INC_SENSORMANAGER_HPP

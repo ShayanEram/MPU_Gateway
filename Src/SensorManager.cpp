@@ -4,9 +4,26 @@
 #include <ctime>
 #include <string>
 
-SensorManager::SensorManager(ThreadSafeQueue<SensorData>& q): _queue(q), _running(false) {}
+SensorManager::SensorManager(ThreadSafeQueue<SensorData>& q): _queue(q), _running(false), modbusClient_("/dev/ttyS0", 9600), i2cSensor_("/dev/i2c-1", 0x48),
+                                                            spi_("/dev/spidev0.0", 500000, SPI_MODE_0, 8), opcuaClient_("opc.tcp://192.168.1.100:4840"),
+                                                            modbusTcpClient_("192.168.1.50", 502), can_("can0"), pwm_(0, 0) 
+{
+    pwm_.setPeriod(20000000);     // 20 ms period
+    pwm_.setDutyCycle(1500000);   // 1.5 ms pulse
+    pwm_.enable();
+
+}
 
 SensorManager::~SensorManager() { 
+    modbusClient_.disconnect();
+    i2cSensor_.closeBus();
+    spi_.closeBus();
+    opcuaClient_.disconnect();
+    modbusTcpClient_.disconnect();
+    can_.closeBus();
+    pwm_.disable();
+    pwm_.unexportChannel();
+
     stop(); 
 }
 //------------------------------------------------------------------------------------
